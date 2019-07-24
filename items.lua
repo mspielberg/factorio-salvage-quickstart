@@ -2,18 +2,18 @@ data:extend
 {
   {
     type = "item",
-    name = "sqs-core-sampling-drill",
-    icon = "__base__/graphics/icons/burner-mining-drill.png",
+    name = "sqs-mining-drill",
+    icon = "__salvage-quickstart__/graphics/icons/sqs-mining-drill.png",
     icon_size = 32,
     subgroup = "extraction-machine",
-    order = "sqs-core-sampling-drill",
-    place_result = "sqs-core-sampling-drill",
+    order = "sqs-mining-drill",
+    place_result = "sqs-mining-drill",
     stack_size = 1,
   },
   {
     type = "item",
     name = "sqs-furnace",
-    icon = "__base__/graphics/icons/electric-furnace.png",
+    icon = "__salvage-quickstart__/graphics/icons/sqs-furnace.png",
     icon_size = 32,
     subgroup = "smelting-machine",
     order = "sqs-furnace",
@@ -23,7 +23,7 @@ data:extend
   {
     type = "item",
     name = "sqs-roboport",
-    icon = "__base__/graphics/icons/roboport.png",
+    icon = "__salvage-quickstart__/graphics/icons/sqs-roboport.png",
     icon_size = 32,
     subgroup = "logistic-network",
     order = "sqs-roboport",
@@ -33,7 +33,7 @@ data:extend
   {
     type = "item",
     name = "sqs-construction-robot",
-    icon = "__base__/graphics/icons/construction-robot.png",
+    icon = "__salvage-quickstart__/graphics/icons/sqs-construction-robot.png",
     icon_size = 32,
     subgroup = "logistic-network",
     order = "sqs-roboport",

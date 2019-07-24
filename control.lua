@@ -29,7 +29,7 @@ local function on_init()
         ["sqs-furnace"] = 1,
         ["sqs-roboport"] = 1,
         ["sqs-construction-robot"] = 10,
-        ["sqs-core-sampling-drill"] = 1,
+        ["sqs-mining-drill"] = 1,
       })
   end
 end
@@ -38,8 +38,8 @@ local function on_built_entity(event)
   local entity = event.created_entity or event.entity
   local chest_name
   local offset
-  if entity.name == "sqs-core-sampling-drill" then
-    chest_name = "sqs-core-sampling-drill-chest"
+  if entity.name == "sqs-mining-drill" then
+    chest_name = "sqs-mining-drill-chest"
     offset = { x = -0.5, y = -0.5 }
   elseif entity.name == "sqs-roboport" then
     chest_name ="logistic-chest-storage"
@@ -58,7 +58,7 @@ end
 
 local function on_mined_entity(event)
   local entity = event.entity
-  if entity.name == "sqs-core-sampling-drill" or entity.name == "sqs-roboport" then
+  if entity.name == "sqs-mining-drill" or entity.name == "sqs-roboport" then
     local chest = entity.surface.find_entities_filtered{
       type = {"container", "logistic-container"},
       area = entity.bounding_box,
