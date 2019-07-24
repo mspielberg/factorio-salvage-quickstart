@@ -1,6 +1,7 @@
 {
   "name": "salvage-quickstart",
   "title": "Salvage Quickstart",
+  "description": "Start with very fast self-powered tools to reduce the tedium of the very early game.",
   "author": "Therax",
   "factorio_version": "0.17",
   "version": "0.1.0",
