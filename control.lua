@@ -22,31 +22,6 @@ local function offset(direction, longitudinal, orthogonal)
   end
 end
 
-local function on_init()
-  if remote.interfaces["freeplay"] then
-    remote.call("freeplay", "set_skip_intro", true)
-    remote.call("freeplay", "set_created_items",
-      {
-        ["pistol"] = 1,
-        ["firearm-magazine"] = 10,
-      })
-  end
-end
-
-script.on_configuration_changed(function(data)
-  if data.mod_changes
-  and data.mod_changes[script.mod_name]
-  and data.mod_changes[script.mod_name].old_version == "0.1.0" then
-    global.crashfx = { containers_spawned = 3 }
-    for _, s in pairs(game.surfaces) do
-      for _, chest in pairs(s.find_entities_filtered{name = "sqs-mining-drill-chest"}) do
-        chest.minable = true
-        chest.teleport(moveposition(chest.position, { x = 1, y = 1 }))
-      end
-    end
-  end
-end)
-
 local function on_built_entity(event)
   local entity = event.created_entity or event.entity
   local chest_name
@@ -119,6 +94,7 @@ local function on_tick(event)
       container.insert(item_name)
     end
   elseif container == false then
+    log("crash sequence ended on tick "..event.tick)
     script.on_event(defines.events.on_tick, nil)
   end
 end
@@ -128,12 +104,45 @@ local handlers = {
   on_player_mined_entity = on_mined_entity,
   on_robot_built_entity = on_built_entity,
   on_robot_mined_entity = on_mined_entity,
-  on_tick = on_tick,
   script_raised_destroy = on_mined_entity,
   script_raised_revive = on_built_entity,
 }
 
-script.on_init(on_init)
 for name, handler in pairs(handlers) do
   script.on_event(defines.events[name], handler)
 end
+
+local function on_load()
+  if not (global.crashfx and global.crashfx.done) then
+    script.on_event(defines.events.on_tick, on_tick)
+  end
+end
+
+local function on_init()
+  if remote.interfaces["freeplay"] then
+    remote.call("freeplay", "set_skip_intro", true)
+    local starting = remote.call("freeplay", "get_created_items")
+    starting["burner-mining-drill"] = nil
+    starting["stone-furnace"] = nil
+    remote.call("freeplay", "set_created_items", starting)
+  end
+  on_load()
+end
+
+script.on_init(on_init)
+script.on_load(on_load)
+
+script.on_configuration_changed(function(data)
+  if data.mod_changes
+  and data.mod_changes[script.mod_name]
+  and data.mod_changes[script.mod_name].old_version == "0.1.0" then
+    global.crashfx = { containers_spawned = 3 }
+    for _, s in pairs(game.surfaces) do
+      for _, chest in pairs(s.find_entities_filtered{name = "sqs-mining-drill-chest"}) do
+        chest.minable = true
+        chest.teleport(moveposition(chest.position, { x = 1, y = 1 }))
+      end
+    end
+  end
+end)
+

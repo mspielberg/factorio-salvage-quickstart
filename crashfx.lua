@@ -2,7 +2,7 @@ local END_TIME = 30 * 60
 local DECAY = 300
 local CENTER_STDDEV = 15
 local NUM_CONTAINERS = 3
-local CONTAINER_PROB = 0.005
+local CONTAINER_PROB = 0.01
 local CONTAINER_STDDEV = 10
 local FIRE_PROB = 0.7
 local SAFE_RANGE = 4
@@ -68,7 +68,15 @@ local function safe_position(name, stddev)
     area = {{pos.x-SAFE_RANGE,pos.y-SAFE_RANGE},{pos.x+SAFE_RANGE,pos.y+SAFE_RANGE}},
     limit = 1,
   }
-  if colliding[1] then log("skipping placement because of "..colliding[1].name.." at "..serpent.line(colliding[1].position).." filter was "..serpent.line(avoid_types(name))) return safe_position(name, stddev) end
+  if colliding[1] then
+    log(serpent.line
+    {
+      msg="retry",
+      name=name,
+      cause_name = colliding[1].name,
+      cause_position = colliding[1].position,
+    })
+    return safe_position(name, stddev) end
   return pos
 end
 
@@ -124,7 +132,10 @@ local function run(tick)
   if not global.crashfx then
     global.crashfx = { containers_spawned = 0 }
   end
-  if global.crashfx.containers_spawned >= NUM_CONTAINERS and tick > END_TIME then return false end
+  if global.crashfx.containers_spawned >= NUM_CONTAINERS and tick > END_TIME then
+    global.crashfx.done = true
+    return false
+  end
   if not nauvis then nauvis = game.surfaces.nauvis end
 
   local r = math.random()
