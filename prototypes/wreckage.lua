@@ -54,4 +54,3 @@ end
 add_resistances(data.raw.container["big-ship-wreck-1"])
 add_resistances(data.raw.container["big-ship-wreck-2"])
 add_resistances(data.raw.container["big-ship-wreck-3"])
-log(serpent.block(data.raw.container["big-ship-wreck-1"]))

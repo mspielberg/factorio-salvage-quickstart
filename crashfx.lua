@@ -69,6 +69,7 @@ local function safe_position(name, stddev)
     limit = 1,
   }
   if colliding[1] then
+    --[[
     log(serpent.line
     {
       msg="retry",
@@ -76,6 +77,7 @@ local function safe_position(name, stddev)
       cause_name = colliding[1].name,
       cause_position = colliding[1].position,
     })
+    ]]
     return safe_position(name, stddev) end
   return pos
 end
