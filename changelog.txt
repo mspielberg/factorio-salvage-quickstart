@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2019-07-27
+  Changes:
+    - Wreckage can now be mined for materials.
+    - Wreckage containing machines now has resistance to fire and physical so it isn't accidentally destroyed.
+    - Added note in startup message that explosives can be used to remove big wreckage.
+    - Players now start with wood in inventory as in vanilla, for those zero tree challenge runs.
+---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2019-07-26
   Changes:
