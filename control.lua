@@ -53,7 +53,7 @@ local function on_mined_entity(event)
     if drill then drill.destroy() end
   elseif entity.name == "sqs-roboport" then
     local chest = entity.surface.find_entity(
-      "logistic-container-storage",
+      "logistic-chest-storage",
       moveposition(entity.position, {x = 0.5, y = 0.5}))
     local buffer = event.buffer
     if chest then
@@ -94,7 +94,7 @@ local function on_tick(event)
       container.insert(item_name)
     end
   elseif container == false then
-    log("crash sequence ended on tick "..event.tick)
+    --log("crash sequence ended on tick "..event.tick)
     script.on_event(defines.events.on_tick, nil)
   end
 end
