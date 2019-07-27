@@ -38,6 +38,6 @@ data:extend
     subgroup = "logistic-network",
     order = "sqs-roboport",
     place_result = "sqs-construction-robot",
-    stack_size = 50,
+    stack_size = 10,
   },
 }
