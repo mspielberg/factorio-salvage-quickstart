@@ -1,3 +1,5 @@
+local crashfx = require "crashfx"
+
 local function moveposition(position, offset)
   return {x=position.x + offset.x, y=position.y + offset.y}
 end
@@ -22,47 +24,62 @@ end
 
 local function on_init()
   if remote.interfaces["freeplay"] then
+    remote.call("freeplay", "set_skip_intro", true)
     remote.call("freeplay", "set_created_items",
       {
         ["pistol"] = 1,
         ["firearm-magazine"] = 10,
-        ["sqs-furnace"] = 1,
-        ["sqs-roboport"] = 1,
-        ["sqs-construction-robot"] = 10,
-        ["sqs-mining-drill"] = 1,
       })
   end
 end
 
+script.on_configuration_changed(function(data)
+  if data.mod_changes
+  and data.mod_changes[script.mod_name]
+  and data.mod_changes[script.mod_name].old_version == "0.1.0" then
+    global.crashfx = { containers_spawned = 3 }
+    for _, s in pairs(game.surfaces) do
+      for _, chest in pairs(s.find_entities_filtered{name = "sqs-mining-drill-chest"}) do
+        chest.minable = true
+        chest.teleport(moveposition(chest.position, { x = 1, y = 1 }))
+      end
+    end
+  end
+end)
+
 local function on_built_entity(event)
   local entity = event.created_entity or event.entity
   local chest_name
-  local offset
+  local off
   if entity.name == "sqs-mining-drill" then
-    chest_name = "sqs-mining-drill-chest"
-    offset = { x = -0.5, y = -0.5 }
+    entity.direction = defines.direction.south
+    local chest = entity.surface.create_entity{
+      name = "sqs-mining-drill-chest",
+      force = entity.force,
+      position = moveposition(entity.position, { x = 0.5, y = 0.5 }),
+    }
   elseif entity.name == "sqs-roboport" then
-    chest_name ="logistic-chest-storage"
-    offset = { x =  0.5, y =  0.5 }
-  else
-    return
+    local chest = entity.surface.create_entity{
+      name = "logistic-chest-storage",
+      force = entity.force,
+      position = moveposition(entity.position, { x = 0.5, y = 0.5 }),
+    }
+    chest.destructible = false
+    chest.minable = false
   end
-  local chest = entity.surface.create_entity{
-    name = chest_name,
-    force = entity.force,
-    position = moveposition(entity.position, offset),
-  }
-  chest.destructible = false
-  chest.minable = false
 end
 
 local function on_mined_entity(event)
   local entity = event.entity
-  if entity.name == "sqs-mining-drill" or entity.name == "sqs-roboport" then
-    local chest = entity.surface.find_entities_filtered{
-      type = {"container", "logistic-container"},
-      area = entity.bounding_box,
-    }[1]
+  if entity.name == "sqs-mining-drill-chest" then
+    local drill = entity.surface.find_entity(
+      "sqs-mining-drill",
+      moveposition(entity.position, {x = -0.5, y = -0.5}))
+    if drill then drill.destroy() end
+  elseif entity.name == "sqs-roboport" then
+    local chest = entity.surface.find_entity(
+      "logistic-container-storage",
+      moveposition(entity.position, {x = 0.5, y = 0.5}))
     local buffer = event.buffer
     if chest then
       if buffer then
@@ -80,11 +97,38 @@ local function on_mined_entity(event)
   end
 end
 
+local CRASH_ITEMS = {
+  {"sqs-mining-drill"},
+  {"sqs-furnace"},
+  {"sqs-roboport", "sqs-construction-robot"},
+}
+
+local function on_tick(event)
+  if event.tick == 0 then
+    if game.is_multiplayer() then
+      player.print({"sgs-intro-msg"})
+    else
+      game.show_message_dialog{text = {"sqs-intro-msg"}}
+    end
+  end
+
+  local container = crashfx.run(event.tick)
+  if container then
+    local item_names = CRASH_ITEMS[global.crashfx.containers_spawned]
+    for _, item_name in pairs(item_names) do
+      container.insert(item_name)
+    end
+  elseif container == false then
+    script.on_event(defines.events.on_tick, nil)
+  end
+end
+
 local handlers = {
   on_built_entity = on_built_entity,
   on_player_mined_entity = on_mined_entity,
   on_robot_built_entity = on_built_entity,
   on_robot_mined_entity = on_mined_entity,
+  on_tick = on_tick,
   script_raised_destroy = on_mined_entity,
   script_raised_revive = on_built_entity,
 }

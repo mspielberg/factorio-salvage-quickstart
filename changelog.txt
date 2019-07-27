@@ -1,0 +1,15 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2019-07-26
+  Changes:
+    - Moved mining drill chest from northwest corner to southeast corner.
+    - The entire mining drill can be clicked to access the chest.
+    - Renamed furnace to make its purpose clearer.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2019-07-24
+  Features:
+    - Self-powered 2x2 furnace, 10x as fast as a steel/electric furnace. Not craftable.
+    - Self-powered 2x2 mining drill that outputs only to a built-in chest. It is possible to full from the chest with 2 inserters. Not craftable.
+    - The player starts with 10 very fast construction robots that consume little energy. Not craftable.
+    - Self-powered 2x2 roboport with built-in logistic storage chest. Slow charging rate and 2 charging slots, which should be plenty for the 10 starter construction bots. Not craftable.

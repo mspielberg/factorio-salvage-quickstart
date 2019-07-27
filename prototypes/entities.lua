@@ -32,7 +32,7 @@ local drill_chest =
   icon_size = 32,
   flags = {"placeable-neutral", "player-creation"},
   order = "sqs-mining-drill-chest",
-  minable = {mining_time = 0.2, result = "steel-chest"},
+  minable = {mining_time = 0.2, result = "sqs-mining-drill"},
   max_health = 50,
   corpse = "small-remnants",
   open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
@@ -48,9 +48,8 @@ local drill_chest =
       percent = 60
     }
   },
-  collision_box = {{-0.35, -0.35}, {0.35, 0.35}},
-  selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
-  selection_priority = 60,
+  collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
+  selection_box = {{-1.5, -1.5}, {0.5, 0.5}},
   fast_replaceable_group = "container",
   inventory_size = 2,
   vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
@@ -99,12 +98,14 @@ local drill_chest =
 local drill = table.deepcopy(data.raw["mining-drill"]["burner-mining-drill"])
 drill.name = "sqs-mining-drill"
 drill.icon = "__salvage-quickstart__/graphics/icons/sqs-mining-drill.png"
-drill.minable.result = "sqs-mining-drill"
+table.insert(drill.flags, "not-rotatable")
+drill.selection_box = nil
+drill.minable = nil
 drill.energy_source = { type = "void" }
 drill.mining_speed = 10
-drill.vector_to_place_result = {-0.5,-0.5}
+drill.vector_to_place_result = {0.5, 0.5}
 drill.working_sound.sound.filename = "__base__/sound/fast-transport-belt.ogg"
-table.insert(drill.flags, "not-rotatable")
+drill.animations.north = drill.animations.south
 add_tint(drill, {r=1, g=0.8, b=0.8})
 
 local furnace = table.deepcopy(data.raw["furnace"]["electric-furnace"])

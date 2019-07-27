@@ -1,2 +1,3 @@
-require "entities"
-require "items"
+require "prototypes.entities"
+require "prototypes.items"
+require "prototypes.wreckage"
