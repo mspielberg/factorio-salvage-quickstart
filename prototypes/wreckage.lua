@@ -11,28 +11,21 @@ local wreckages = {
   { name = "small-scorchmark", results = nil },
 }
 
-local function add_resistances(proto)
+local function add_resistance(proto, type, decrease, percent)
   if not proto.resistances then proto.resistances = {} end
-  local found_phys, found_fire
   for _, resist in pairs(proto.resistances) do
-    if resist.type == "physical" then
-      resist.decrease = (resist.decrease or 0) < 10 and 10 or resist.decrease
-      resist.percent = (resist.percent or 0) < 0.9 and 0.9 or resist.percent
-      found_phys = true
-    end
-    if resist.type == "fire" then
-      resist.percent = (resist.percent or 0) < 1 and 1 or resist.percent
-      found_fire = true
+    if resist.type == type then
+      resist.decrease = (resist.decrease or 0) < decrease and decrease or resist.decrease
+      resist.percent = (resist.percent or 0) < percent and percent or resist.percent
+      return
     end
   end
+  table.insert(proto.resistances, { type = type, decrease = decrease, percent = percent })
+end
 
-  if not found_phys then
-    table.insert(proto.resistances, { type = "physical", decrease = 10, percent = .9 })
-  end
-  if not found_fire then
-    table.insert(proto.resistances, { type = "fire", decrease = 0, percent = 1 })
-  end
-
+local function add_resistances(proto)
+  add_resistance(proto, "physical", 10, 90)
+  add_resistance(proto, "fire", 0, 100)
   proto.max_health = (proto.max_health < 250) and 250 or proto.max_health
 end
 
