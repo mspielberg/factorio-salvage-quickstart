@@ -24,82 +24,21 @@ local function change_scale(t, factor)
   end)
 end
 
-local drill_chest =
-{
-  type = "container",
-  name = "sqs-mining-drill-chest",
-  icon = "__base__/graphics/icons/steel-chest.png",
-  icon_size = 32,
-  flags = {"placeable-neutral", "player-creation"},
-  order = "sqs-mining-drill-chest",
-  minable = {mining_time = 0.2, result = "sqs-mining-drill"},
-  max_health = 50,
-  corpse = "small-remnants",
-  open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
-  close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },
-  resistances =
-  {
-    {
-      type = "fire",
-      percent = 90
-    },
-    {
-      type = "impact",
-      percent = 60
-    }
-  },
-  collision_box = {{-0.3, -0.3}, {0.3, 0.3}},
-  selection_box = {{-1.5, -1.5}, {0.5, 0.5}},
-  fast_replaceable_group = "container",
-  inventory_size = 2,
-  vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
-  picture =
-  {
-    layers =
-    {
-      {
-        filename = "__base__/graphics/entity/steel-chest/steel-chest.png",
-        priority = "extra-high",
-        width = 32,
-        height = 40,
-        shift = util.by_pixel(0, -0.5),
-        hr_version =
-        {
-          filename = "__base__/graphics/entity/steel-chest/hr-steel-chest.png",
-          priority = "extra-high",
-          width = 64,
-          height = 80,
-          shift = util.by_pixel(-0.25, -0.5),
-          scale = 0.5
-        }
-      },
-      {
-        filename = "__base__/graphics/entity/steel-chest/steel-chest-shadow.png",
-        priority = "extra-high",
-        width = 56,
-        height = 22,
-        shift = util.by_pixel(12, 7.5),
-        draw_as_shadow = true,
-        hr_version =
-        {
-          filename = "__base__/graphics/entity/steel-chest/hr-steel-chest-shadow.png",
-          priority = "extra-high",
-          width = 110,
-          height = 46,
-          shift = util.by_pixel(12.25, 8),
-          draw_as_shadow = true,
-          scale = 0.5
-        }
-      }
-    }
-  },
-}
+local drill_chest = table.deepcopy(data.raw.container["steel-chest"])
+drill_chest.name = "sqs-mining-drill-chest"
+drill_chest.order = "sqs-mining-drill-chest"
+drill_chest.minable.result = "sqs-mining-drill"
+drill_chest.placeable_by = {item = "sqs-mining-drill", count = 1}
+drill_chest.collision_box = {{-0.3, -0.3}, {0.3, 0.3}}
+drill_chest.selection_box = {{-1.3, -1.3}, {0.5, 0.5}}
+drill_chest.selection_priority = 60
+drill_chest.fast_replaceable_group = nil
+drill_chest.inventory_size = 2
 
 local drill = table.deepcopy(data.raw["mining-drill"]["burner-mining-drill"])
 drill.name = "sqs-mining-drill"
 drill.icon = "__salvage-quickstart__/graphics/icons/sqs-mining-drill.png"
 table.insert(drill.flags, "not-rotatable")
-drill.selection_box = nil
 drill.minable = nil
 drill.energy_source = { type = "void" }
 drill.mining_speed = 10
