@@ -81,7 +81,7 @@ local CRASH_ITEMS = {
 local function on_tick(event)
   if event.tick == 0 then
     if game.is_multiplayer() then
-      player.print({"sgs-intro-msg"})
+      game.print({"sqs-intro-msg"})
     else
       game.show_message_dialog{text = {"sqs-intro-msg"}}
     end
