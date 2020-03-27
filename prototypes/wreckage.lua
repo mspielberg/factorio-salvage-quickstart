@@ -39,7 +39,7 @@ end
 
 for _, wreck_info in pairs(wreckages) do
   local name = wreck_info.name
-  sqs_wreck = util.merge{get_wreck(name), wreck_info}
+  local sqs_wreck = util.merge{get_wreck(name), wreck_info}
   sqs_wreck.name = "sqs-"..sqs_wreck.name
   data:extend{sqs_wreck}
 end
