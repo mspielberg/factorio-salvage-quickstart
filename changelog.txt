@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2019-08-19
+  Compatibility:
+    - Update to Factorio 0.18.
+  Balancing:
+    - Significantly increase the range of the starting roboport. Now it is truly something you can set up once and never move.
+    - Increase starting construction robot speed.
+    - Increase size of the starting miner inventory to make it slightly less annoying, but still not a replacement for real mining infrastructure.
+---------------------------------------------------------------------------------------------------
 Version: 0.3.3
 Date: 2019-08-19
   Bugfixes:
